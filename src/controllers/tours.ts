@@ -8,7 +8,6 @@ export const addTours = async (
   next: NextFunction
 ) => {
   const { date, created_AT, price } = req.body;
-  console.log("123123", "897987", req.body);
 
   const tours = await prismaClient.tours.create({
     data: {
@@ -18,5 +17,16 @@ export const addTours = async (
     },
   });
 
+  res.json(tours);
+};
+
+export const getTours = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const tours = await prismaClient.tours.findMany({
+    orderBy: { createdAt: "desc" },
+  });
   res.json(tours);
 };

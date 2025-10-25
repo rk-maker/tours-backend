@@ -4,7 +4,11 @@ import { ErrorCode } from "../exceptions/root";
 import * as jwt from "jsonwebtoken";
 import { JWT_TOKEN } from "../sevrets";
 import { prismaClient } from "..";
-const authMessage = async (req: Request, res: Response, next: NextFunction) => {
+const authMiddleWare = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   //NOTE:extract token from header
   const token = req.headers.authorization;
   //NOTE:if token is not present, throw an error of unauthorized
@@ -45,4 +49,4 @@ const authMessage = async (req: Request, res: Response, next: NextFunction) => {
     }
   }
 };
-export default authMessage;
+export default authMiddleWare;
