@@ -19,7 +19,7 @@ export const signup = async (
   if (user) {
     next(
       new BadRequestExceptionError(
-        "User not Found",
+        "User Already Exist!",
         ErrorCode.USER_ALREADY_EXIST
       )
     );
@@ -60,4 +60,8 @@ export const login = async (
     JWT_TOKEN
   );
   res.json({ user, token });
+};
+
+export const me = async (req: Request, res: Response, next: NextFunction) => {
+  res.json(req?.user);
 };

@@ -12,9 +12,36 @@ model user {
   name      String
   email     String   @unique
   password  String
-  role      Role  
+  role      Role  @default(CUSTOMER)
+  createdAt DateTime @default(now())
+  tours tours[]
+
+}
+model tours{
+id Int @id @default(autoincrement())
+operator_id Int
+operator user? @relation(fields: [operator_id],references: [id])
+title String
+description String
+perks String
+location String
+date DateTime
+price Decimal
+capacity Int
+booked_count Int 
+status Status @default(PENDING)
   createdAt DateTime @default(now())
 }
+
+
+enum Status {
+PENDING
+APPROVED 
+REJECTED
+
+}
+
+
 
 enum Role {
   CUSTOMER
