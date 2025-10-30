@@ -3,10 +3,10 @@ import { PORT } from "./sevrets";
 import rootRouter from "./routes";
 import { PrismaClient } from "@prisma/client";
 import { errorMessage } from "./middleware/errors";
-import { signUpSchema } from "./schema/users";
+import cors from "cors";
 
 const app: Express = express();
-
+app.use(cors());
 app.use(express.json());
 
 app.use("/api", rootRouter);

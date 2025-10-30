@@ -20,7 +20,8 @@ export const signup = async (
     next(
       new BadRequestExceptionError(
         "User Already Exist!",
-        ErrorCode.USER_ALREADY_EXIST
+        ErrorCode.USER_ALREADY_EXIST,
+        null
       )
     );
   }
@@ -50,7 +51,8 @@ export const login = async (
   if (!compareSync(password, user.password))
     throw new BadRequestExceptionError(
       "Incorrect Password",
-      ErrorCode.INCORRRECT_PASSWORD
+      ErrorCode.INCORRRECT_PASSWORD,
+      null
     );
 
   const token = jwt.sign(
