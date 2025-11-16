@@ -18,7 +18,6 @@ export const addTours = async (
     data: {
       ...req.body,
       date: new Date(date),
-      price: new Prisma.Decimal(price),
     },
   });
 

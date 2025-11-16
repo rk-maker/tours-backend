@@ -26,6 +26,8 @@ model bookings {
   createdAt DateTime @default(now())
   tour     tours    @relation(fields: [tour_id], references: [id])
   user     user     @relation(fields: [user_id], references: [id])
+  @@index([user_id])
+  @@index([tour_id])
 }
 model tours{
 id Int @id @default(autoincrement())
@@ -42,6 +44,10 @@ booked_count Int
 status Status @default(PENDING)
 createdAt DateTime @default(now())
 bookings    bookings[] 
+
+@@index([status])
+@@index([operator_id])
+@@index([date])
 }
 
 
