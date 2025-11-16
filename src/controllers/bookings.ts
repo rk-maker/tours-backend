@@ -20,7 +20,7 @@ export const addBookings = async (
     if (req.body.quantity > tour.capacity) {
       throw new BadRequestExceptionError(
         "No seats Available",
-        ErrorCode.BOOKING_NOT_FOUND,
+        ErrorCode.SEATS_NOT_AVAILABLE,
         error
       );
     }
