@@ -4,20 +4,21 @@ import { Prisma } from "@prisma/client";
 import { NotFoundException } from "../exceptions/not-found";
 import { ErrorCode } from "../exceptions/root";
 import { success } from "zod";
+import { createTourSchema } from "../schema/tours";
 
 export const addTours = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { date, created_AT, price } = req.body;
+  createTourSchema.parse(req.body);
+  const { date, price } = req.body;
 
   const tours = await prismaClient.tours.create({
     data: {
       ...req.body,
       date: new Date(date),
       price: new Prisma.Decimal(price),
-      perks: req.body.perks.join(","),
     },
   });
 
@@ -42,9 +43,7 @@ export const updateTours = async (
 ) => {
   try {
     const tours = req.body;
-    if (tours.perks) {
-      tours.perks = tours.perks.join(",");
-    }
+
     const updatedTours = await prismaClient.tours.update({
       where: { id: +req.body.tours.id },
       data: tours,

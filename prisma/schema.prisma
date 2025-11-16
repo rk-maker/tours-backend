@@ -15,7 +15,17 @@ model user {
   role      Role  @default(CUSTOMER)
   createdAt DateTime @default(now())
   tours tours[]
+  bookings    bookings[] 
 
+}
+model bookings {
+  id       Int      @id @default(autoincrement())
+  tour_id  Int
+  user_id  Int
+  quantity Int      @default(1) 
+  createdAt DateTime @default(now())
+  tour     tours    @relation(fields: [tour_id], references: [id])
+  user     user     @relation(fields: [user_id], references: [id])
 }
 model tours{
 id Int @id @default(autoincrement())
@@ -23,14 +33,15 @@ operator_id Int
 operator user? @relation(fields: [operator_id],references: [id])
 title String
 description String
-perks String
+perks String[]
 location String
 date DateTime
 price Decimal
 capacity Int
 booked_count Int 
 status Status @default(PENDING)
-  createdAt DateTime @default(now())
+createdAt DateTime @default(now())
+bookings    bookings[] 
 }
 
 
