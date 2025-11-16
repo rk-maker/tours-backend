@@ -82,8 +82,10 @@ export const getTourByID = async (
   try {
     const tour = await prismaClient.tours.findFirstOrThrow({
       where: { id: +req.params.id },
+      include: {
+        operator: true,
+      },
     });
-
     res.json(tour);
   } catch (error) {
     throw new NotFoundException("Tour not found ", ErrorCode.TOURS_NOT_FOUND);

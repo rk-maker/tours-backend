@@ -4,17 +4,40 @@ import { BadRequestExceptionError } from "../exceptions/bad-requests";
 import { NotFoundException } from "../exceptions/not-found";
 import { ErrorCode } from "../exceptions/root";
 import { success } from "zod";
+import { createBookingSchema } from "../schema/bookings";
+import { error } from "console";
 
-export const addBookings = async (req: Request, res: Response) => {
-  const { fromDate, toDate } = req.body;
-  const booking = await prismaClient.bookings.create({
-    data: {
-      ...req.body,
-      fromDate: new Date(fromDate),
-      toDate: new Date(toDate),
-    },
+export const addBookings = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  createBookingSchema.parse(req.body);
+  const result = await prismaClient.$transaction(async (prisma) => {
+    const tour = await prisma.tours.findUniqueOrThrow({
+      where: { id: req.body.tour_id },
+    });
+    if (req.body.quantity > tour.capacity) {
+      throw new BadRequestExceptionError(
+        "No seats Available",
+        ErrorCode.BOOKING_NOT_FOUND,
+        error
+      );
+    }
+
+    const booking = await prisma.bookings.create({
+      data: req.body,
+    });
+    const updatedTour = await prisma.tours.update({
+      where: { id: +req.body.tour_id },
+      data: {
+        booked_count: { increment: req.body.quantity },
+        capacity: { decrement: req.body.quantity },
+      },
+    });
+    return { booking, updatedTour };
   });
-  res.json(booking);
+  res.json(result);
 };
 
 export const updateBooking = async (req: Request, res: Response) => {

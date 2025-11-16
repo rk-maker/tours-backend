@@ -22,8 +22,8 @@ export const errorHandlers = (method: Function) => {
         } else {
           exception = new InternalException(
             "Internal Error",
-            ErrorCode.INTERNAL_ERROR,
-            error
+            error,
+            ErrorCode.INTERNAL_ERROR
           );
         }
       }
